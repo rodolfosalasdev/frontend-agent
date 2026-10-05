@@ -120,7 +120,7 @@ For significant work:
 1. **Understand:** goal, requirements, constraints, versions, router, architecture, existing code, acceptance criteria.
 2. **Analyze:** rendering strategy, data flow, state, API boundaries, cache behavior, performance, security and accessibility risks.
 3. **Design:** component structure and boundaries (server/client, Suspense), contracts, error and loading states, test strategy. For non-trivial designs, state the chosen approach and the main alternative.
-4. **Implement:** follow the architecture, use version-correct APIs, keep changes scoped to the task. Start from the closest reference in `examples/` and adapt it to the project's conventions.
+4. **Implement:** follow the architecture, use version-correct APIs, keep changes scoped to the task. If the project already has the pattern, follow the project. Otherwise start from the closest file in `examples/`: read its "When to use", "Why" and "Adapt" sections first, and copy code only when you are implementing that pattern. An example is a snapshot of one Next.js version; the bundled docs for the **installed** version win over the example. Re-check every version-sensitive API (error props, cache, Zod helpers) before writing it.
 5. **Review:** scan `anti-patterns.md` against your changes.
 6. **Validate:** follow `verification.md`: typecheck, lint, tests, `next build` when the change can affect build output, routing or rendering mode, and browser verification when you have browser tools. Use the scripts in `package.json`.
 
@@ -130,8 +130,8 @@ For new projects created from scratch, follow `bootstrap.md` and present the cre
 
 A task is only done when, proportionally to its scope:
 
-- **Every data view has four states:** loading (skeleton with the same shape as the content, no layout shift), empty (message and, when possible, an action), error (useful message and retry), success.
-- **Every form has:** pending state on submit (no double submission), field-level errors associated with inputs, a success feedback, and server-side validation.
+- **A data view the task creates or changes has four states:** loading (skeleton with the same shape as the content, no layout shift), empty (message and, when possible, an action), error (useful message and retry), success. Do not add a skeleton, an empty state or an `error.tsx` to a screen the task does not change.
+- **A form the task creates or changes has:** pending state on submit (no double submission), field-level errors associated with inputs, a success feedback, and server-side validation. Do not retrofit unrelated forms.
 - **Basic accessibility holds:** semantic HTML, labels, keyboard access, visible focus, sufficient contrast.
 - **Responsive:** works at mobile and desktop widths without overflow.
 - **`anti-patterns.md` was checked** against the change.
@@ -178,6 +178,6 @@ Before finishing significant work, verify internally (do **not** print this chec
 - I evaluated data fetching, caching (what, where, key, lifetime, invalidation) and waterfalls.
 - I evaluated security (server-side authorization, secrets, Server Action validation) and accessibility.
 - I avoided unnecessary abstractions, dependencies and client JavaScript.
-- The Definition of done is met (four states, forms, accessibility, responsive) and `anti-patterns.md` was checked.
+- The Definition of done is met for the view or form this task creates or changes (four states, form feedback, accessibility, responsive) and `anti-patterns.md` was checked.
 - I used version-appropriate APIs and flagged what I could not verify.
 - I did not claim unverified results.

@@ -83,3 +83,32 @@ Interfaces devem funcionar em mobile, tablet e desktop, com touch, mouse e tecla
 - Anime `transform` e `opacity`; evite animar propriedades de layout (`width`, `top`, `height`).
 - Transições curtas e com propósito (feedback, continuidade espacial), não decorativas em excesso.
 - Respeite `prefers-reduced-motion`.
+
+## Estados de UX
+
+Toda view que carrega dados e todo formulário que a tarefa cria ou altera precisa dos seus estados. Não acrescente esses estados numa edição que não mexe nessa tela.
+
+| Estado | Requisito |
+|---|---|
+| Carregando | Indicador com o mesmo formato e tamanho do conteúdo final, sem deslocar o layout. Em ações rápidas, evite piscar a tela. |
+| Vazio | Mensagem que explica por que está vazio e, quando fizer sentido, uma ação ("Criar o primeiro item", "Limpar filtros"). |
+| Erro | Mensagem humana, sem detalhe interno, com uma ação de tentar de novo. O resto da página continua usável. |
+| Sucesso | O conteúdo; em mutações, confirmação visível (mensagem inline, toast ou navegação). |
+| Parcial / desatualizado | Ao mostrar o dado anterior enquanto atualiza, indique de forma sutil em vez de apagar a view. |
+
+Formulários: botão de envio em estado pendente (sem envio duplo), erro ao lado do campo e associado a ele, valores preservados depois de uma falha, e feedback explícito de sucesso. Ações destrutivas pedem confirmação e dizem o que vai acontecer.
+
+## Qualidade visual
+
+Siga o design system do projeto. Quando ele deixar espaço, aplique:
+
+- **Espaçamento:** a escala do projeto, de forma consistente. Itens relacionados mais perto; grupos separados por um espaço maior.
+- **Tipografia:** poucos tamanhos, com papéis claros (título da página, título de seção, corpo, legenda). Comprimento de linha confortável para leitura.
+- **Hierarquia:** uma ação primária por view; as secundárias visualmente mais quietas. A informação mais importante é a mais evidente.
+- **Cor:** base neutra e **uma** cor de destaque para a ação primária e o foco. Cores semânticas (erro, sucesso, aviso) só no significado delas. Contraste suficiente nos temas claro e escuro.
+- **Consistência:** o mesmo raio, sombra, borda e tamanho de ícone. Use tokens, não valores soltos.
+- **Estados interativos:** hover, foco visível, ativo e desabilitado distintos em todo elemento interativo.
+- **Movimento:** transições curtas e com propósito; respeite `prefers-reduced-motion`.
+- **Alinhamento:** números em tabelas alinhados à direita, com algarismos tabulares.
+
+**Auto-revisão:** depois de uma mudança visual, quando houver browser, confira em largura de celular e de desktop. Corrija desalinhamento, espaçamento inconsistente, overflow e estado faltando antes de reportar.

@@ -86,7 +86,7 @@ Leia o arquivo de princípios correspondente ao assunto **antes** de responder s
 | DOM, storage, workers, observers, Web Components, compatibilidade de APIs | [principles/web-platform.md](principles/web-platform.md) |
 | HTTP, cache, CORS, integração com API, data flow, erros, retry | [principles/http.md](principles/http.md) |
 | Estado local, compartilhado, server state, persistência | [principles/state-management.md](principles/state-management.md) |
-| CSS, layout, responsividade, design system, Tailwind/shadcn, temas, i18n visual | [principles/css-ui.md](principles/css-ui.md) |
+| CSS, layout, responsividade, design system, Tailwind/shadcn, temas, i18n visual, estados de UX, qualidade visual | [principles/css-ui.md](principles/css-ui.md) |
 | Semântica, teclado, foco, ARIA, leitores de tela, formulários | [principles/accessibility.md](principles/accessibility.md) |
 | XSS, CSRF, CSP, tokens, cookies, auth, dependências | [principles/security.md](principles/security.md) |
 | Estratégia de testes e **roteiro de code review** | [principles/testing.md](principles/testing.md) |
@@ -103,7 +103,7 @@ Em code reviews, leia `testing.md` (roteiro) e os arquivos dos temas que o códi
 
 Depois de alterar código, rode o que o projeto oferecer: lint, typecheck (`tsc --noEmit` ou script equivalente) e testes relacionados. Use os scripts do `package.json` em vez de inventar comandos.
 
-Para mudanças visuais, quando possível, verifique no browser: layout responsivo, foco visível, navegação por teclado.
+Para mudanças visuais, leia a seção "Qualidade visual" de `principles/css-ui.md` e, quando possível, verifique no browser: layout responsivo, foco visível, navegação por teclado.
 
 Se não conseguir verificar algo, diga explicitamente o que não foi verificado.
 

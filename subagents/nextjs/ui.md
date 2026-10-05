@@ -34,41 +34,24 @@ ui:
 
 ## UX states
 
-Every data-driven view and every form must handle all of its states. This is the most visible difference between a prototype and a product.
+The four states, form feedback and when they apply are in `~/.cursor/skills/frontend-agent/principles/css-ui.md` ("Estados de UX"). Apply them only to a data view or form the task creates or changes. In Next.js, implement them as:
 
-| State | Requirement |
-|---|---|
-| Loading | Skeleton with the same shape and size as the final content (no layout shift). For fast actions, avoid flicker (show the indicator only after a short delay or keep previous content with a pending style). |
-| Empty | Clear message explaining why it is empty and, when possible, a primary action ("Create your first project", "Clear filters"). |
-| Error | Human message without internal details, a retry action, and the rest of the page still usable. Route-level errors via `error.tsx`. |
-| Success | The content; for mutations, visible confirmation (inline message or toast). |
-| Partial / stale | When showing previous data while refreshing, indicate it subtly (e.g. reduced opacity or a small spinner) instead of blanking the view. |
-
-Forms:
-
-- submit button shows a pending state and prevents double submission;
-- field errors appear next to the field and are associated with it;
-- values are preserved after a failed submission;
-- success feedback is explicit (message, toast or navigation);
-- destructive actions ask for confirmation (e.g. shadcn `AlertDialog`) and say what will happen.
-
-Toasts: use the project's solution (commonly `sonner` in shadcn/ui projects). Toasts complement, not replace, inline errors, and must not be the only place critical information appears.
+- **Loading:** `loading.tsx` or a `<Suspense>` fallback whose skeleton matches the final layout. Do not add a root `loading.tsx` unless the whole app should suspend.
+- **Error:** `error.tsx` for the segment, with a retry. On 16.3+ the prop is `retry` (re-fetches); `reset` still exists but does not re-fetch. Check `error.md` in the bundled docs for the installed version.
+- **Empty and success:** rendered by the page or the component that owns the data.
+- **Forms:** pending via `useActionState` or `useTransition`; field errors from the Server Action associated with inputs. See `examples/form-with-pending-and-errors.md`.
+- **Destructive actions:** confirm with the project's dialog (commonly shadcn `AlertDialog`).
+- **Toasts:** the project's solution (commonly `sonner` in shadcn/ui). Toasts complement inline errors; they must not be the only place critical information appears.
 
 ## Visual quality
 
-Aim for interfaces that look intentional, not generic. Follow the project's design system first; when it leaves room, apply:
+Follow "Qualidade visual" in `~/.cursor/skills/frontend-agent/principles/css-ui.md`, then the project's tokens. Next.js additions:
 
-- **Spacing:** use the spacing scale consistently (Tailwind tokens). Related elements closer together, groups separated by larger gaps. Generous whitespace over cramming.
-- **Typography:** a small type scale (e.g. 3 to 5 sizes) with clear roles (page title, section title, body, caption). Limit weights. Comfortable line length for reading (roughly 60 to 80 characters).
-- **Hierarchy:** one clear primary action per view; secondary actions visually quieter (`variant="outline"`, `ghost`). The most important information is the most prominent.
-- **Color:** neutral base plus **one** accent color for primary actions and focus. Semantic colors (destructive, success, warning) only for their meaning. Always meet contrast requirements, in light and dark themes.
-- **Consistency:** same radius, shadows, border and icon sizes across components (use tokens, not arbitrary values).
-- **Interactive states:** every interactive element has distinct hover, focus-visible, active and disabled states.
-- **Motion:** short, purposeful transitions (feedback, continuity) using `transform`/`opacity`; respect `prefers-reduced-motion`.
-- **Alignment and density:** align to a grid; numbers in tables right-aligned with tabular figures (`tabular-nums`); avoid mixed alignments in the same column.
-- **Starting points:** shadcn/ui components and blocks (when the project uses shadcn) instead of building layouts from scratch; check them through the shadcn MCP or registry.
+- Prefer the project's shadcn/ui components and blocks over layouts built from scratch. Look them up through the shadcn MCP or registry instead of writing them from memory.
+- Secondary actions use the quieter variant the project already has (`outline`, `ghost`).
+- Respect `prefers-reduced-motion` with Tailwind `motion-safe:` / `motion-reduce:` when the project uses Tailwind.
 
-**Self-review:** after implementing a visual change, take screenshots at mobile and desktop widths (see `verification.md`) and check them against this list. Fix misalignments, inconsistent spacing, overflow and missing states before reporting.
+**Self-review:** after a visual change, take screenshots at mobile and desktop widths (see `verification.md`) and check them against that principle. Fix misalignment, inconsistent spacing, overflow and a missing state before reporting.
 
 ## Accessibility in React / Next.js
 

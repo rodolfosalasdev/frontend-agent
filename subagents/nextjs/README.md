@@ -65,7 +65,7 @@ Se não conseguir fazer a verificação no navegador, o relatório diz `visual v
 | Cache | Para cada dado: o quê, onde, chave, tempo de vida e invalidação. `updateTag` em Server Actions, `revalidateTag(tag, 'max')` fora delas. |
 | Tabelas | Estado em **search params** da URL (`?status=paid&q=ana&sort=-total&page=2`), para compartilhar o link já filtrado. Validação no servidor, defaults omitidos, `<Link>` para ordenação e paginação. |
 | TanStack Query | **Por critério**, não por padrão: quando há estado de servidor no cliente que justifica (polling granular, mutations otimistas, muitos widgets). Pede confirmação antes de instalar. |
-| UX | Toda tela cobre os quatro estados: loading, vazio, erro e sucesso. Formulários com pending, erros por campo e valores preservados. |
+| UX | A view de dados ou o formulário que a tarefa cria ou altera cobre os quatro estados (loading, vazio, erro, sucesso) e, no formulário, pending, erros por campo e valores preservados. Não acrescentar isso numa tela que a tarefa não mexe. |
 | Qualidade visual | Escala de espaçamento e tipografia, hierarquia clara, uma cor de destaque, estados de hover/foco/ativo, `prefers-reduced-motion`, auto-revisão por screenshot. |
 | Performance | Orçamentos: LCP, INP e CLS dentro dos limites "good" do web.dev (valores conferidos na fonte, não fixados no prompt); sem regressão de JS; sem waterfalls; modo da rota (estático/dinâmico) não muda sem motivo. |
 | Dependências | Nenhuma biblioteca nova sem justificativa e confirmação. |
@@ -75,8 +75,8 @@ Se não conseguir fazer a verificação no navegador, o relatório diz `visual v
 
 Uma tarefa só é reportada como concluída quando:
 
-- os quatro estados da tela existem;
-- formulários têm pending, erros acessíveis e valores preservados;
+- a view de dados que a tarefa cria ou altera tem os quatro estados;
+- o formulário que a tarefa cria ou altera tem pending, erros acessíveis e valores preservados;
 - o básico de acessibilidade está coberto (labels, foco visível, teclado, contraste);
 - o layout funciona no mobile e no desktop;
 - o [`anti-patterns.md`](anti-patterns.md) foi conferido;
