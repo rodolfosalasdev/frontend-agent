@@ -24,17 +24,28 @@
 
 ### Framework (opcional)
 
-Preencha quando o projeto usa um framework. Os especialistas de framework leem esta seção.
+Preencha quando o projeto usa um framework. Os especialistas de framework leem esta seção. Em um monorepo, preencha a stack da aplicação desta pasta, não a de um app vizinho.
 
-- **Router / modelo de rotas:** (ex.: Next.js App Router, Pages Router ou ambos)
+**Next.js**
+
+- **Router / modelo de rotas:** App Router, Pages Router ou ambos
 - **Estratégia padrão de renderização:** (ex.: Server Components por padrão; Client Components só nas folhas interativas)
 - **Estratégia de cache:** (ex.: Cache Components habilitado; tags por entidade; revalidação após mutações)
 - **Mutações:** onde ficam Server Actions / Server Functions e quais regras de validação e autorização seguem
 - **Endpoints:** quando usar Route Handlers vs chamar o backend diretamente
 - **Proxy / middleware:** responsabilidades permitidas
-- **Estado de tabelas e listas:** na URL via search params (padrão) ou outra estratégia; nomes de parâmetros padronizados (ex.: `q`, `page`, `sort`, filtros)
+- **Estado de tabelas e listas:** na URL via search params (padrão) ou outra estratégia; nomes de parâmetros (`q`, `page`, `sort`, filtros)
 - **Server state no cliente:** biblioteca usada (ex.: TanStack Query, SWR ou nenhuma), onde fica o provider e o `staleTime` padrão
 - **Flags experimentais em uso:**
+
+**Angular**
+
+- **Change detection:** zoneless ou Zone.js; se OnPush é obrigatório
+- **SSR / hidratação:** client-only, SSR, prerender; hidratação incremental se houver
+- **Estado de tabelas e listas:** na URL via query string (padrão) ou outra estratégia; nomes de parâmetros (`q`, `page`, `sort`, filtros)
+- **UI:** Angular Material, CDK, outro, ou nenhum
+- **Formulários:** reativos tipados, template-driven ou signal forms
+- **Flags experimentais em uso:** (`resource`, `httpResource`, etc.)
 
 ## 3. Navegadores suportados
 

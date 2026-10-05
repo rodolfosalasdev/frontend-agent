@@ -81,6 +81,17 @@ Depois de alterar `agent.md` ou algum arquivo de `principles/`, rode novamente o
 
 Variação sem projeto: o agente pergunta a versão ou responde sinalizando que o comportamento depende dela.
 
+**Variação Angular. Preparação:** projeto com `@angular/core` nas dependências.
+
+**Prompt:**
+> Como faço a detecção de mudanças sem Zone.js?
+
+**Esperado:**
+- Identifica `@angular/core`, a versão instalada e se a app é zoneless ou usa Zone.js (`angular.json` polyfills, `provideZonelessChangeDetection` / `provideZoneChangeDetection`).
+- Delega ao `angular-specialist` com o bloco de contexto (versão, change detection, problema, objetivo, restrições, workspace).
+- O especialista responde conforme a versão: v21+ já é o padrão; v20.2+ estável com confirmação num app existente; antes disso, não liga em produção.
+- O Frontend Agent responde em PT-BR, sem colar o relatório bruto.
+
 ## 7. Refactoring
 
 **Prompt:**
@@ -234,3 +245,73 @@ Rode em um projeto Next.js de teste (App Router). Em todos, o esperado comum é:
 - Roda a verificação do `verification.md`: typecheck, lint, build, e verificação no navegador (screenshots em 375px e 1280px, console, teclado) quando houver ferramentas de browser.
 - Se não tiver browser, escreve `visual verification not run` no relatório, e o Frontend Agent faz o fallback.
 - O relatório segue o contrato (seção 10), com a seção "Verification" preenchida.
+
+## 18. `@defer` abaixo da dobra
+
+**Preparação:** projeto Angular 18+ com uma página de produto. O título e o preço estão no primeiro viewport. Um bloco de avaliações, componente standalone pesado, está abaixo da dobra.
+
+**Prompt:**
+> A página de produto está com o LCP ruim. O bloco de avaliações puxa um componente grande.
+
+**Esperado:**
+- Lê `templates.md` e `performance.md`.
+- Não coloca título, preço ou a imagem de LCP dentro de `@defer`.
+- O bloco de avaliações fica em `@defer` com trigger de viewport (ou equivalente justificado), placeholder com espaço reservado, e import direto do arquivo do componente, sem barrel.
+- Confere na documentação da versão instalada antes de escrever o trigger.
+- Pede build de produção para ver o chunk, e não conclui a divisão só com `ng serve`.
+
+## 19. Zoneless conforme a versão
+
+**Variação A. Preparação:** Angular 21+, sem `provideZoneChangeDetection`.
+
+**Prompt:**
+> Deixa essa aplicação zoneless para ficar mais rápida.
+
+**Esperado:**
+- Detecta que zoneless já é o padrão na v21+.
+- Não adiciona `provideZonelessChangeDetection` nem remove Zone.js se ele já não está nos polyfills.
+- Procura `provideZoneChangeDetection` e `zone.js` nos polyfills. Se não houver, diz que não há o que migrar.
+
+**Variação B. Preparação:** Angular 17, com Zone.js.
+
+**Prompt:**
+> Liga o zoneless nesse projeto.
+
+**Esperado:**
+- Não aplica `provideZonelessChangeDetection`.
+- Explica que zoneless estável começa na 20.2 e que nesta versão o caminho é OnPush e notificações corretas, ou atualizar o Angular.
+- Não desinstala `zone.js`.
+
+**Variação C. Preparação:** Angular 20.2+, ainda com Zone.js, app existente.
+
+**Prompt:**
+> Quero zoneless.
+
+**Esperado:**
+- Pede confirmação antes de mudar o bootstrap.
+- Descreve `provideZonelessChangeDetection()`, a remoção de `zone.js` dos polyfills, e o risco de views que mutam campo sem signal ou `markForCheck`.
+
+## 20. Estado derivado
+
+**Preparação:** componente Angular 18+ que já usa signals. Um `effect` copia `items` filtrados para outro signal.
+
+**Prompt:**
+> Esse filtro reaplica a lista inteira a cada tecla e às vezes entra em loop.
+
+**Esperado:**
+- Lê `signals.md` e o item 2 de `anti-patterns.md`.
+- Troca o `effect` por `computed`.
+- Não reescreve o resto do componente para outra API.
+
+## 21. Lista nova
+
+**Preparação:** aplicação Angular 19+ zoneless, sem biblioteca de UI além do que já está no projeto.
+
+**Prompt:**
+> Cria a lista de clientes com busca, carregando do nosso serviço HTTP.
+
+**Esperado:**
+- Parte de `examples/signal-list.md` e adapta: a busca vai para a query string (`routing.md`), o filtro de uma lista remota não fica só no cliente se o serviço já pagina.
+- A view nova tem loading, vazio, erro e sucesso. Não adiciona isso em outras rotas.
+- Não instala Angular Material, Tailwind nem signal forms se a versão for menor que 21.
+- Roda a verificação de `verification.md`. Sem browser, o relatório diz `visual verification not run`.

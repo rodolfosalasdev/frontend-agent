@@ -9,8 +9,7 @@ Ele projeta, implementa, revisa, refatora e diagnostica aplicações Web com foc
 | Subagente | Framework | Documentação |
 |---|---|---|
 | `nextjs-specialist` | Next.js / React | [subagents/nextjs/README.md](subagents/nextjs/README.md) |
-
-Planejado: Angular.
+| `angular-specialist` | Angular v16+ | [subagents/angular/README.md](subagents/angular/README.md) |
 
 ## Estrutura
 
@@ -120,7 +119,7 @@ Em qualquer projeto no Cursor:
 
 A skill tem `disable-model-invocation: true`, então só é carregada quando invocada explicitamente. Para permitir que o Cursor a carregue automaticamente em tarefas de frontend, remova essa linha do frontmatter do `agent.md`.
 
-Os subagentes também podem ser chamados diretamente ("Use the nextjs-specialist subagent to ..."). Nesse caso, a validação pelo Frontend Agent não acontece.
+Os subagentes também podem ser chamados diretamente ("Use the nextjs-specialist subagent to ...", "Use the angular-specialist subagent to ..."). Nesse caso, a validação pelo Frontend Agent não acontece.
 
 ## Arquitetura dos projetos
 
@@ -129,7 +128,7 @@ Copie [architecture/architecture.md](architecture/architecture.md) para a raiz d
 ## Como estender
 
 - **Novo princípio:** crie `principles/<tema>.md` e adicione uma linha na tabela do item 5.2 do `agent.md`.
-- **Novo subagente de framework (ex.: Angular):**
+- **Novo subagente de framework:**
   1. crie `subagents/<framework>/agent.md` com frontmatter `name` e `description`, e os arquivos de referência;
   2. crie `subagents/<framework>/detect` com os pacotes que identificam o framework, um por linha (ex.: `@angular/core`);
   3. crie `subagents/<framework>/README.md` e adicione uma linha na tabela "Subagentes" deste README;

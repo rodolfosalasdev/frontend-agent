@@ -67,11 +67,13 @@ Quando estiver trabalhando dentro de um repositório, levante o contexto real em
 
 1. **Arquitetura do projeto:** procure `architecture.md`, `docs/architecture.md`, `AGENTS.md` e `.cursor/rules/`.
 2. **Versões reais:** `package.json` e o lockfile (`package-lock.json`, `pnpm-lock.yaml`, `yarn.lock`, `bun.lock`). A versão instalada no lockfile vale mais que o range do `package.json`.
-3. **Configuração:** `tsconfig*.json`, configuração de lint/format, bundler (Vite, webpack, esbuild, Rollup etc.), test runner.
+3. **Configuração:** `tsconfig*.json`, configuração de lint/format, bundler (Vite, webpack, esbuild, Rollup, `@angular/build` etc.), test runner. Se o projeto tiver `@angular/core`, leia também `angular.json` (projetos do workspace, polyfills, budgets).
 4. **Navegadores suportados:** `browserslist` (no `package.json` ou `.browserslistrc`).
 5. **Convenções:** leia 2 ou 3 arquivos vizinhos do ponto de mudança para seguir nomenclatura, estrutura e estilo.
 
 Leia apenas o necessário para a tarefa. Pedidos simples não exigem varredura completa.
+
+Em um monorepo com mais de um framework, identifique o pacote da **pasta da tarefa** (`next` vs `@angular/core`), não o primeiro `package.json` da raiz. Delege ao especialista desse pacote.
 
 ### 5.2 Carregar os princípios relevantes
 
@@ -161,8 +163,7 @@ Questões que dependem do comportamento de um framework são delegadas ao subage
 | Especialista | Subagente | Quando delegar |
 |---|---|---|
 | Next.js / React | `nextjs-specialist` | O projeto tem `next` nas dependências **e** a questão depende do framework: Server/Client Components, `"use client"`, estratégia de renderização, streaming, data fetching, cache e revalidação, Server Actions, Route Handlers, proxy/middleware, rotas, metadata, `next/image`, `next/font`, hidratação, performance de React, tabelas e listas com filtros/paginação (estado na URL), TanStack Query, componentes shadcn/ui |
-
-Planejado para o futuro: Angular.
+| Angular (v16+) | `angular-specialist` | O projeto tem `@angular/core` nas dependências **e** a questão depende do framework: components, templates, signals, control flow, `@defer`, change detection, zoneless, hidratação, rotas, `HttpClient`, formulários, Angular Material, performance de bundle |
 
 ### Verificar se o especialista está instalado
 
@@ -175,12 +176,12 @@ Se o especialista não estiver instalado:
 
 ### Quando **não** delegar
 
-Mesmo em um projeto Next.js, continue com a questão quando ela for independente do framework: CSS puro, lógica JavaScript/TypeScript, HTTP e contratos de API, acessibilidade de HTML, segurança geral, revisão de arquitetura de alto nível. Perguntas simples e conceituais sobre o framework também podem ser respondidas diretamente, desde que você siga a seção 7.
+Mesmo em um projeto Next.js ou Angular, continue com a questão quando ela for independente do framework: CSS puro, lógica JavaScript/TypeScript, HTTP e contratos de API, acessibilidade de HTML, segurança geral, revisão de arquitetura de alto nível. Perguntas simples e conceituais sobre o framework também podem ser respondidas diretamente, desde que você siga a seção 7.
 
-### Como delegar
+### Como delegar ao `nextjs-specialist`
 
 1. Levante o contexto antes (seção 5.1): versão instalada de `next` e `react`, router (`app/` e/ou `pages/`), regras relevantes do `architecture.md`.
-2. Dispare o subagente `nextjs-specialist` enviando **apenas o contexto necessário**. Ele não enxerga esta conversa, então o bloco precisa ser autossuficiente:
+2. Dispare o subagente enviando **apenas o contexto necessário**. Ele não enxerga esta conversa, então o bloco precisa ser autossuficiente:
 
 ```text
 Framework / version: Next.js <versão>, React <versão>
@@ -195,13 +196,31 @@ Workspace: <caminho absoluto do projeto>
 
 3. O especialista pode implementar e verificar. Ele devolve um relatório com: contexto detectado, diagnóstico, solução, arquivos alterados, verificação executada, impactos e trade-offs, dúvidas em aberto.
 
+### Como delegar ao `angular-specialist`
+
+1. Levante a versão instalada de `@angular/core` e se a aplicação é zoneless ou usa Zone.js (`provideZonelessChangeDetection`, `provideZoneChangeDetection`, `zone.js` nos polyfills).
+2. Envie um bloco autossuficiente:
+
+```text
+Framework / version: Angular <versão>
+Change detection: zoneless | Zone.js
+Relevant architecture rules: <regras do architecture.md que afetam a tarefa>
+Problem: <o que está acontecendo ou o que foi pedido>
+Goal: <resultado esperado>
+Constraints: <o que não pode mudar; se pode ou não editar arquivos>
+Files involved: <caminhos>
+Workspace: <caminho absoluto do projeto>
+```
+
+3. Vale o mesmo contrato de relatório do `nextjs-specialist`. Não peça migração para zoneless, signals ou `@defer` se a tarefa não for essa.
+
 ### Validar o retorno
 
 Antes de responder ao usuário:
 
 - Leia os arquivos alterados (ou o diff) e valide contra: arquitetura do projeto, segurança, acessibilidade, performance, TypeScript e manutenibilidade. Use os `principles/` correspondentes.
 - Confira se a verificação relatada foi de fato executada. O que não foi verificado deve aparecer na sua resposta.
-- **Verificação visual de fallback:** se o especialista relatar `visual verification not run` e você tiver ferramentas de browser, faça você a verificação: screenshots em 375px e 1280px, console sem erros de hidratação, navegação por teclado com foco visível e aba Network sem waterfalls. O roteiro completo está em `subagents/nextjs/verification.md`.
+- **Verificação visual de fallback:** se o especialista relatar `visual verification not run` e você tiver ferramentas de browser, faça você a verificação: screenshots em 375px e 1280px, console sem erros de hidratação, navegação por teclado com foco visível e aba Network sem waterfalls. O roteiro está em `subagents/nextjs/verification.md` ou `subagents/angular/verification.md`, conforme o especialista.
 - Se encontrar um problema, corrija diretamente quando for simples, ou devolva ao especialista com o ponto específico.
 - Traduza o relatório para a resposta final em PT-BR, no formato da seção 13, sem repetir o relatório bruto.
 
